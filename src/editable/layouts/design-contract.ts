@@ -1,23 +1,24 @@
 import type { CSSProperties } from 'react'
 
 export const editableRootStyle = {
-  '--slot4-page-bg': '#f7f4ef',
-  '--slot4-page-text': '#111111',
-  '--slot4-panel-bg': '#efeae3',
-  '--slot4-surface-bg': '#fffdfa',
-  '--slot4-muted-text': '#514e49',
-  '--slot4-soft-muted-text': '#77716a',
-  '--slot4-accent': '#c92f2f',
-  '--slot4-accent-fill': '#c92f2f',
-  '--slot4-accent-soft': '#f3d8d3',
-  '--slot4-dark-bg': '#111111',
+  '--slot4-page-bg': '#111827',
+  '--slot4-page-text': '#f8fafc',
+  '--slot4-panel-bg': '#172033',
+  '--slot4-surface-bg': '#1b2436',
+  '--slot4-muted-text': '#a7b0c2',
+  '--slot4-soft-muted-text': '#7f8aa1',
+  '--slot4-accent': '#b983ff',
+  '--slot4-accent-fill': '#05c787',
+  '--slot4-accent-soft': '#243852',
+  '--slot4-dark-bg': '#0b1020',
   '--slot4-dark-text': '#ffffff',
-  '--slot4-media-bg': '#e4e0da',
-  '--slot4-cream': '#f7f4ef',
-  '--slot4-warm': '#fffdfa',
-  '--slot4-lavender': '#c92f2f',
-  '--slot4-gray': '#ece9e4',
-  '--slot4-body-gradient': 'linear-gradient(180deg, #f7f4ef 0%, #fffdfa 52%, #eeeae4 100%)',
+  '--slot4-media-bg': '#202a3d',
+  '--slot4-cream': '#151d2d',
+  '--slot4-warm': '#1b2436',
+  '--slot4-lavender': '#b983ff',
+  '--slot4-gray': '#273248',
+  '--slot4-border': 'rgba(154,168,199,0.18)',
+  '--slot4-body-gradient': 'linear-gradient(180deg, #111827 0%, #151d2d 52%, #0b1020 100%)',
 } as CSSProperties
 
 export const editablePalette = {
@@ -40,7 +41,7 @@ export const editablePalette = {
   warmBg: 'bg-[var(--slot4-warm)]',
   lavenderBg: 'bg-[var(--slot4-lavender)]',
   grayBg: 'bg-[var(--slot4-gray)]',
-  border: 'border-black/15',
+  border: 'border-white/10',
   darkBorder: 'border-white/20',
   shadow: 'shadow-[0_10px_30px_rgba(17,17,17,0.08)]',
   shadowStrong: 'shadow-[0_24px_70px_rgba(17,17,17,0.18)]',
@@ -50,7 +51,7 @@ export const editablePalette = {
 export const editableDesignContract = {
   shell: {
     page: `min-h-screen ${editablePalette.pageBg} ${editablePalette.pageText}`,
-    section: 'mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10',
+    section: 'mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-8',
     sectionY: 'py-12 sm:py-16 lg:py-20',
   },
   layout: {
@@ -71,9 +72,9 @@ export const editableDesignContract = {
     dark: `${editablePalette.darkBg} ${editablePalette.darkText}`,
   },
   button: {
-    primary: `inline-flex items-center justify-center gap-2 bg-[var(--slot4-dark-bg)] px-7 py-3.5 text-xs font-black uppercase tracking-[0.12em] text-white transition hover:bg-[var(--slot4-accent-fill)]`,
-    secondary: `inline-flex items-center justify-center gap-2 border border-black/30 bg-transparent px-7 py-3.5 text-xs font-black uppercase tracking-[0.12em] text-black transition hover:bg-black hover:text-white`,
-    accent: `inline-flex items-center justify-center gap-2 bg-[var(--slot4-accent-fill)] px-7 py-3.5 text-xs font-black uppercase tracking-[0.12em] text-white transition hover:bg-black`,
+    primary: `inline-flex items-center justify-center gap-2 rounded-md bg-[var(--slot4-accent-fill)] px-7 py-3.5 text-xs font-black uppercase tracking-[0.12em] text-white transition hover:-translate-y-0.5 hover:bg-emerald-400`,
+    secondary: `inline-flex items-center justify-center gap-2 rounded-md border border-white/20 bg-white/5 px-7 py-3.5 text-xs font-black uppercase tracking-[0.12em] text-white transition hover:-translate-y-0.5 hover:border-[var(--slot4-accent)]`,
+    accent: `inline-flex items-center justify-center gap-2 rounded-md bg-[var(--slot4-accent-fill)] px-7 py-3.5 text-xs font-black uppercase tracking-[0.12em] text-white transition hover:-translate-y-0.5 hover:bg-emerald-400`,
   },
   media: {
     frame: `relative overflow-hidden ${editablePalette.mediaBg}`,
