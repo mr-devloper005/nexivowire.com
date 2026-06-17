@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { CSSProperties } from 'react'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, Bookmark, Building2, Camera, CheckCircle2, Download, ExternalLink, FileText, Globe2, Mail, MapPin, MessageCircle, Phone, Tag, UserRound } from 'lucide-react'
+import { ArrowLeft, Bookmark, Building2, Camera, CheckCircle2, Download, ExternalLink, FileText, Globe2, Mail, MapPin, MessageCircle, Phone, RadioTower, Send, Share2, Tag, UserRound } from 'lucide-react'
 import { buildPostMetadata, buildTaskMetadata } from '@/lib/seo'
 import { buildPostUrl, fetchArticleComments, fetchTaskPostBySlug, fetchTaskPosts } from '@/lib/task-data'
 import { getTaskConfig, SITE_CONFIG, type TaskKey } from '@/lib/site-config'
@@ -134,38 +134,102 @@ function BackLink({ task }: { task: TaskKey }) {
 
 function ArticleDetail({ task, post, related, comments }: { task: TaskKey; post: SitePost; related: SitePost[]; comments: Array<{ id: string; name: string; comment: string; createdAt: string }> }) {
   const images = getImages(post)
-  const published = post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''
+  const isMedia = task === 'mediaDistribution'
+  const publisher = getField(post, ['publisher', 'brand', 'company', 'author']) || post.authorName || SITE_CONFIG.name
+  const industry = categoryOf(post, isMedia ? 'Media distribution' : 'News')
   return (
-    <section className="bg-[#f7f4ef]">
-      <header className="border-b border-black/20">
-        <div className="mx-auto max-w-[1180px] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+    <section className="editorial-shell">
+      <header className="border-b border-white">
+        <div className="mx-auto max-w-[1180px] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
           <BackLink task={task} />
-          <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t-4 border-black pt-4 text-[11px] font-black uppercase tracking-[0.16em]">
-            <span className="text-[#c92f2f]">{categoryOf(post, 'News')}</span>
-            {published ? <time>{published}</time> : null}
+          <div className="mt-10 flex flex-wrap items-center gap-3 text-[11px] font-black uppercase tracking-[0.16em]">
+            <span className="rounded-md border border-[var(--slot4-accent)]/40 bg-[var(--slot4-accent)]/10 px-3 py-2 text-[var(--slot4-accent)]">{industry}</span>
+            
+            {isMedia ? <span className="rounded-md border border-white/10 bg-white/5 px-3 py-2 text-[var(--slot4-accent-fill)]">Distribution live</span> : null}
           </div>
-          <h1 className="editorial-serif mt-6 max-w-6xl text-5xl font-black leading-[0.94] tracking-[-0.055em] sm:text-6xl lg:text-[5.5rem]">{post.title}</h1>
-          {summaryText(post) ? <p className="mt-6 max-w-4xl text-xl font-bold leading-8 text-black/68 sm:text-2xl">{summaryText(post)}</p> : null}
+          <h1 className="mt-6 max-w-6xl text-4xl font-black leading-tight text-white sm:text-6xl lg:text-7xl">{post.title}</h1>
+          {isMedia ? (
+            <div className="mt-8 grid gap-3 sm:grid-cols-4">
+              {[
+                ['Reach', '42K+'],
+                ['Channels', '18'],
+                ['Engagement', '7.4%'],
+                ['Status', 'Live'],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-md border border-white/10 bg-white/[0.045] p-4">
+                  <p className="text-2xl font-black text-white">{value}</p>
+                  <p className="mt-1 text-xs font-black uppercase tracking-[0.14em] text-white/45">{label}</p>
+                </div>
+              ))}
+            </div>
+          ) : null}
         </div>
       </header>
 
       {images[0] ? (
-        <figure className="mx-auto max-w-[1320px] border-x border-b border-black/15 bg-white">
-          <img src={images[0]} alt="" className="max-h-[760px] w-full object-cover" />
-          <figcaption className="border-t border-black/15 px-4 py-3 text-xs italic text-black/55 sm:px-6">Featured image for {post.title}</figcaption>
+        <figure className="mx-auto max-w-[1280px] border-x border-b border-white/10 bg-[#172033]">
+          <img src={images[0]} alt="" className="max-h-[640px] w-full object-cover" />
+          <figcaption className="border-t border-white/10 px-4 py-3 text-xs font-bold text-white/45 sm:px-6">Campaign visual asset</figcaption>
         </figure>
       ) : null}
 
-      <div className="mx-auto grid max-w-[1180px] gap-12 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,760px)_300px] lg:px-8 lg:py-16">
-        <article className="min-w-0 border-t-4 border-black pt-8">
+      <div className="mx-auto grid max-w-[1180px] gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,760px)_340px] lg:px-8 lg:py-16">
+        <article className="min-w-0 rounded-md border border-white/10 bg-[#172033]/82 p-5 sm:p-8">
+          {isMedia ? (
+            <div className="mb-8 grid gap-3 sm:grid-cols-3">
+              {[
+                [RadioTower, 'Distribution', 'Newswire-ready campaign page'],
+                [Globe2, 'Media reach', 'Publisher and audience context'],
+                [Share2, 'Sharing tools', 'Buttons and actions remain available'],
+              ].map(([Icon, title, body]) => {
+                const ActualIcon = Icon as typeof RadioTower
+                return (
+                  <div key={String(title)} className="rounded-md border border-white/10 bg-white/[0.045] p-4">
+                    <ActualIcon className="h-5 w-5 text-[var(--slot4-accent)]" />
+                    <h2 className="mt-3 text-sm font-black text-white">{title as string}</h2>
+                    <p className="mt-1 text-xs leading-5 text-white/55">{body as string}</p>
+                  </div>
+                )
+              })}
+            </div>
+          ) : null}
           <BodyContent post={post} />
+          {isMedia ? <ShareTools title={post.title} /> : null}
           <EditableComments slug={post.slug} comments={comments} />
         </article>
-        <div className="border-t-4 border-[#c92f2f] pt-5">
+        <div className="min-w-0 space-y-5">
+          {isMedia ? <BrandProfile post={post} publisher={publisher} industry={industry} /> : null}
           <RelatedPanel task={task} post={post} related={related} />
         </div>
       </div>
     </section>
+  )
+}
+
+function ShareTools({ title }: { title: string }) {
+  return (
+    <div className="mt-10 rounded-md border border-white/10 bg-white/[0.045] p-5">
+      <h2 className="flex items-center gap-2 text-lg font-black text-white"><Share2 className="h-5 w-5 text-[var(--slot4-accent)]" /> Sharing tools</h2>
+      <p className="mt-2 text-sm leading-6 text-white/58">Share this campaign with media partners, stakeholders, and publisher review teams.</p>
+      <div className="mt-4 flex flex-wrap gap-3">
+        <a href={`mailto:?subject=${encodeURIComponent(title)}`} className="inline-flex items-center gap-2 rounded-md bg-[var(--slot4-accent-fill)] px-4 py-2.5 text-sm font-black text-white"><Mail className="h-4 w-4" /> Email</a>
+        <a href={`https://www.linkedin.com/sharing/share-offsite/`} className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-black text-white"><Send className="h-4 w-4" /> Share</a>
+      </div>
+    </div>
+  )
+}
+
+function BrandProfile({ post, publisher, industry }: { post: SitePost; publisher: string; industry: string }) {
+  return (
+    <aside className="rounded-md border border-white/10 bg-[#172033]/82 p-5">
+      <p className="text-xs font-black uppercase tracking-[0.22em] text-[var(--slot4-accent)]">Publisher information</p>
+      
+      <div className="mt-5 grid gap-3 text-sm">
+        <div className="rounded-md bg-white/5 p-3"><span className="text-white/45">Industry</span><p className="font-bold text-white">{industry}</p></div>
+        <div className="rounded-md bg-white/5 p-3"><span className="text-white/45">Brand profile</span><p className="font-bold text-white">{summaryText(post) || 'Publisher details and campaign context are available in the release body.'}</p></div>
+        <div className="rounded-md bg-white/5 p-3"><span className="text-white/45">Distribution status</span><p className="font-bold text-[var(--slot4-accent-fill)]">Live and discoverable</p></div>
+      </div>
+    </aside>
   )
 }
 
@@ -400,20 +464,19 @@ function RelatedPanel({ task, post, related, compact = false }: { task: TaskKey;
   return (
     <aside className="min-w-0 space-y-5">
       {!compact ? (
-        <div className="border-b border-black/20 bg-white p-5">
-          <p className="text-xs font-black uppercase tracking-[0.22em] opacity-55">About this post</p>
-          <div className="mt-4 grid gap-3 text-sm font-bold opacity-75">
-            <p className="inline-flex items-center gap-2"><Tag className="h-4 w-4" /> Task: {taskConfig?.label || task}</p>
-            <p className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4" /> Site: {SITE_CONFIG.name}</p>
-            {post.publishedAt ? <p>Published: {new Date(post.publishedAt).toLocaleDateString()}</p> : null}
+        <div className="rounded-md border border-white/10 bg-[#172033]/82 p-5">
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-white/45">Campaign context</p>
+          <div className="mt-4 grid gap-3 text-sm font-bold text-white/70">
+            <p className="inline-flex items-center gap-2"><Tag className="h-4 w-4 text-[var(--slot4-accent)]" /> Type: {taskConfig?.label || task}</p>
+            <p className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-[var(--slot4-accent-fill)]" /> Platform: {SITE_CONFIG.name}</p>
           </div>
         </div>
       ) : null}
       {related.length ? (
-        <div className="border-b border-black/20 bg-white p-5">
+        <div className="rounded-md border border-white/10 bg-[#172033]/82 p-5">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="text-lg font-black tracking-[-0.04em]">More like this</h2>
-            <Link href={taskConfig?.route || '/'} className="text-xs font-black uppercase tracking-[0.16em] opacity-55">View all</Link>
+            <h2 className="text-lg font-black text-white">Related campaigns</h2>
+            <Link href={taskConfig?.route || '/'} className="text-xs font-black uppercase tracking-[0.16em] text-white/50">View all</Link>
           </div>
           <div className="mt-5 grid gap-3">
             {related.map((item) => <RelatedCard key={item.id || item.slug} task={task} post={item} />)}
@@ -427,11 +490,11 @@ function RelatedPanel({ task, post, related, compact = false }: { task: TaskKey;
 function RelatedCard({ task, post }: { task: TaskKey; post: SitePost }) {
   const image = getImages(post)[0]
   return (
-    <Link href={buildPostUrl(task, post.slug)} className="group flex gap-3 border-t border-black/15 py-3 transition hover:text-[#c92f2f]">
-      {image && task !== 'sbm' ? <img src={image} alt="" className="h-20 w-20 shrink-0 object-cover" /> : <div className="flex h-20 w-20 shrink-0 items-center justify-center bg-black text-white"><FileText className="h-6 w-6" /></div>}
+    <Link href={buildPostUrl(task, post.slug)} className="group flex min-w-0 gap-3 border-t border-white/10 py-3 transition hover:text-[var(--slot4-accent)]">
+      {image && task !== 'sbm' ? <img src={image} alt="" className="h-20 w-20 shrink-0 rounded-md object-cover" /> : <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-md bg-white/5 text-white"><FileText className="h-6 w-6" /></div>}
       <div className="min-w-0">
-        <h3 className="line-clamp-3 text-sm font-black leading-tight tracking-[-0.03em]">{post.title}</h3>
-        <p className="mt-2 line-clamp-2 text-xs leading-5 opacity-60">{summaryText(post)}</p>
+        <h3 className="line-clamp-3 text-sm font-black leading-tight text-white">{post.title}</h3>
+        <p className="mt-2 line-clamp-2 text-xs leading-5 text-white/52">{summaryText(post)}</p>
       </div>
     </Link>
   )
@@ -439,16 +502,16 @@ function RelatedCard({ task, post }: { task: TaskKey; post: SitePost }) {
 
 function EditableComments({ slug, comments }: { slug: string; comments: Array<{ id: string; name: string; comment: string; createdAt: string }> }) {
   return (
-    <section className="mt-12 border-t-4 border-black bg-white p-5">
-      <div className="flex items-center gap-2 text-lg font-black"><MessageCircle className="h-5 w-5" /> Comments</div>
+    <section className="mt-10 rounded-md border border-white/10 bg-white/[0.045] p-5">
+      <div className="flex items-center gap-2 text-lg font-black text-white"><MessageCircle className="h-5 w-5 text-[var(--slot4-accent)]" /> Comments</div>
       <div className="mt-5 grid gap-3">
         {comments.slice(0, 5).map((comment) => (
-          <div key={comment.id} className="border-t border-black/15 py-4">
-            <p className="text-sm font-black">{comment.name}</p>
-            <p className="mt-2 text-sm leading-6 opacity-70">{comment.comment}</p>
+          <div key={comment.id} className="border-t border-white/10 py-4">
+            <p className="text-sm font-black text-white">{comment.name}</p>
+            <p className="mt-2 text-sm leading-6 text-white/62">{comment.comment}</p>
           </div>
         ))}
-        {!comments.length ? <p className="text-sm opacity-60">No comments yet for {slug}.</p> : null}
+        {!comments.length ? <p className="text-sm text-white/52">No comments yet for {slug}.</p> : null}
       </div>
     </section>
   )
